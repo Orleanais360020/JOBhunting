@@ -9,7 +9,7 @@ function App() {
     industry: '',
     location: '',
     salary_min: '',
-    culture: ''
+    culture: '',
   })
 
   const searchCompany = async () => {
@@ -19,7 +19,7 @@ function App() {
       const res = await fetch('http://localhost:8000/search_company', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ company_name: companyName })
+        body: JSON.stringify({ company_name: companyName }),
       })
       if (!res.ok) throw new Error('検索に失敗しました')
       const data = await res.json()
@@ -41,9 +41,9 @@ function App() {
         body: JSON.stringify({
           industry: condition.industry,
           location: condition.location,
-          salary_min: Number(condition.salary_min),
-          culture: condition.culture
-        })
+          salary_min: Number(condition.salary_min) || undefined,
+          culture: condition.culture,
+        }),
       })
       if (!res.ok) throw new Error('検索に失敗しました')
       const data = await res.json()
@@ -58,22 +58,54 @@ function App() {
   return (
     <div style={{ padding: '1rem' }}>
       <h1>就活支援アプリ</h1>
+
       <div style={{ marginBottom: '1rem' }}>
         <h2>企業名で検索</h2>
-        <input value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
+        <input
+          value={companyName}
+          onChange={(e) => setCompanyName(e.target.value)}
+        />
         <button onClick={searchCompany}>検索</button>
       </div>
+
       <div style={{ marginBottom: '1rem' }}>
         <h2>条件で検索</h2>
-        <input placeholder="業界" value={condition.industry} onChange={(e) => setCondition({ ...condition, industry: e.target.value })} />
-        <input placeholder="勤務地" value={condition.location} onChange={(e) => setCondition({ ...condition, location: e.target.value })} />
-        <input placeholder="最低年収" value={condition.salary_min} onChange={(e) => setCondition({ ...condition, salary_min: e.target.value })} />
-        <input placeholder="社風" value={condition.culture} onChange={(e) => setCondition({ ...condition, culture: e.target.value })} />
+
+        <input
+          placeholder="業界"
+          value={condition.industry}
+          onChange={(e) =>
+            setCondition({ ...condition, industry: e.target.value })
+          }
+        />
+        <input
+          placeholder="勤務地"
+          value={condition.location}
+          onChange={(e) =>
+            setCondition({ ...condition, location: e.target.value })
+          }
+        />
+        <input
+          placeholder="最低年収"
+          value={condition.salary_min}
+          onChange={(e) =>
+            setCondition({ ...condition, salary_min: e.target.value })
+          }
+        />
+        <input
+          placeholder="社風"
+          value={condition.culture}
+          onChange={(e) =>
+            setCondition({ ...condition, culture: e.target.value })
+          }
+        />
         <button onClick={searchByCondition}>検索</button>
       </div>
+
       {loading && <p>検索中...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      {result && (
+
+      {result && !Array.isArray(result.results) && (
         <div>
           <h2>強み</h2>
           {Array.isArray(result.strengths) ? (
@@ -85,6 +117,7 @@ function App() {
           ) : (
             <p>{result.strengths}</p>
           )}
+
           <h2>課題</h2>
           {Array.isArray(result.challenges) ? (
             <ul>
@@ -95,8 +128,44 @@ function App() {
           ) : (
             <p>{result.challenges}</p>
           )}
+
           <h2>志望動機例</h2>
           <p>{result.motivation}</p>
+        </div>
+      )}
+
+      {result && Array.isArray(result.results) && (
+        <div>
+          {result.results.map((item, idx) => (
+            <div key={idx} style={{ borderTop: '1px solid #ccc', paddingTop: '1rem' }}>
+              <h3>{item.company}</h3>
+
+              <h4>強み</h4>
+              {Array.isArray(item.strengths) ? (
+                <ul>
+                  {item.strengths.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>{item.strengths}</p>
+              )}
+
+              <h4>課題</h4>
+              {Array.isArray(item.challenges) ? (
+                <ul>
+                  {item.challenges.map((c, i) => (
+                    <li key={i}>{c}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>{item.challenges}</p>
+              )}
+
+              <h4>志望動機例</h4>
+              <p>{item.motivation}</p>
+            </div>
+          ))}
         </div>
       )}
     </div>
