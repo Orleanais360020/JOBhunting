@@ -5,6 +5,12 @@ The backend downloads IR information from EDINET, extracts text from PDFs and as
 summarise company strengths, challenges and example motivation statements. The frontend is a simple
 React interface built with Vite.
 
+The backend exposes two endpoints:
+
+- `POST /search_company` with `{ "company_name": "トヨタ自動車" }`
+- `POST /search_by_condition` with a JSON body describing the desired industry,
+  location, minimum salary and company culture
+
 The steps below walk you through setting up the environment, running the application locally and building
 for production. Commands assume Ubuntu 22.04.
 
@@ -15,7 +21,8 @@ project/
 ├── backend/
 │   ├── main.py              # FastAPI application
 │   ├── requirements.txt     # Python dependencies
-│   └── .env.example         # template for your OpenAI API key
+│   ├── .env.example         # template for your OpenAI API key
+│   └── companies.json       # sample company data for condition search
 ├── frontend/
 │   ├── src/                 # React source code
 │   │   ├── App.jsx
@@ -86,4 +93,5 @@ The backend can be served in production using Uvicorn without `--reload` or via 
 
 ## Notes
 - Do **not** commit your `.env` file. It contains your private OpenAI API key.
+- `companies.json` is a small demo list used when searching by conditions. Edit it to add your own companies.
 - Access to EDINET may require a stable network connection. If no document is found the API will return a `404` error.
