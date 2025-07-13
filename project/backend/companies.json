@@ -1,0 +1,5 @@
+[
+  {"name": "トヨタ自動車", "industry": "自動車", "location": "愛知", "salary": 500, "culture": "挑戦"},
+  {"name": "本田技研工業", "industry": "自動車", "location": "東京", "salary": 450, "culture": "技術志向"},
+  {"name": "ソニーグループ", "industry": "電子", "location": "東京", "salary": 600, "culture": "革新"}
+]
