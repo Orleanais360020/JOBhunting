@@ -58,21 +58,52 @@ function App() {
   return (
     <div style={{ padding: '1rem' }}>
       <h1>就活支援アプリ</h1>
+
       <div style={{ marginBottom: '1rem' }}>
         <h2>企業名で検索</h2>
-        <input value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
+        <input
+          value={companyName}
+          onChange={(e) => setCompanyName(e.target.value)}
+        />
         <button onClick={searchCompany}>検索</button>
       </div>
+
       <div style={{ marginBottom: '1rem' }}>
         <h2>条件で検索</h2>
-        <input placeholder="業界" value={condition.industry} onChange={(e) => setCondition({ ...condition, industry: e.target.value })} />
-        <input placeholder="勤務地" value={condition.location} onChange={(e) => setCondition({ ...condition, location: e.target.value })} />
-        <input placeholder="最低年収" value={condition.salary_min} onChange={(e) => setCondition({ ...condition, salary_min: e.target.value })} />
-        <input placeholder="社風" value={condition.culture} onChange={(e) => setCondition({ ...condition, culture: e.target.value })} />
+        <input
+          placeholder="業界"
+          value={condition.industry}
+          onChange={(e) =>
+            setCondition({ ...condition, industry: e.target.value })
+          }
+        />
+        <input
+          placeholder="勤務地"
+          value={condition.location}
+          onChange={(e) =>
+            setCondition({ ...condition, location: e.target.value })
+          }
+        />
+        <input
+          placeholder="最低年収"
+          value={condition.salary_min}
+          onChange={(e) =>
+            setCondition({ ...condition, salary_min: e.target.value })
+          }
+        />
+        <input
+          placeholder="社風"
+          value={condition.culture}
+          onChange={(e) =>
+            setCondition({ ...condition, culture: e.target.value })
+          }
+        />
         <button onClick={searchByCondition}>検索</button>
       </div>
+
       {loading && <p>検索中...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
+
       {result && (
         <div>
           <h2>強み</h2>
@@ -85,6 +116,7 @@ function App() {
           ) : (
             <p>{result.strengths}</p>
           )}
+
           <h2>課題</h2>
           {Array.isArray(result.challenges) ? (
             <ul>
@@ -95,6 +127,7 @@ function App() {
           ) : (
             <p>{result.challenges}</p>
           )}
+
           <h2>志望動機例</h2>
           <p>{result.motivation}</p>
         </div>
